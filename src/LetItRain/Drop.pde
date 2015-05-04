@@ -53,7 +53,7 @@ class Drop {
 
     boolean hasImpactedUser(int ix, int iy)
     {
-        return (this.context.userMap()[ix/scale + (iy/scale) * width]) != 0;
+        return (this.context.userMap()[(int)((ix + (iy * width))/scale)]) != 0;
     }
 
     void draw(PGraphics pg) {

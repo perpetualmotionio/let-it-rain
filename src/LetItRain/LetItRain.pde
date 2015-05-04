@@ -5,30 +5,32 @@ import SimpleOpenNI.*;
 
 Minim minim;
 AudioSnippet backgroundSound;
+AudioSnippet backgroundSoundWhenDetected;
+
 SimpleOpenNI context;
 PGraphics pg;
 
-Thunder thunder;
+Thunders thunders;
 
-final int scale = 1;
-
+final float scale = 1.0;
 final int numDrops = 10000;
+
 HashMap drops = new HashMap();
 
 void setup() {
-  size(640 * scale, 480 * scale, P3D);
+  size((int)(640 * scale), (int)(480 * scale), P3D);
   background(0);
   pg = createGraphics(width, height);
   smooth();
   setupAudio();
   setupKinect();
-  setupThunder();
+  setupThunders();
   setupRain();
 }
 
 
 void stop() {
-  thunder.stop();
+  thunders.stop();
   backgroundSound.close();
   minim.stop();
   super.stop();
@@ -39,9 +41,14 @@ void setupAudio() {
   minim = new Minim(this);
 
   // Initialize background
-  backgroundSound = minim.loadSnippet("background_rain.wav");
+  backgroundSound = minim.loadSnippet("rain.wav");
   backgroundSound.loop(999);
   backgroundSound.setGain(10);
+
+  // Initialize background when detected
+  backgroundSoundWhenDetected = minim.loadSnippet("background_rain.wav");
+  backgroundSoundWhenDetected.loop(999);
+  backgroundSoundWhenDetected.setGain(-10);
 }
 
 void setupRain() {
@@ -50,8 +57,8 @@ void setupRain() {
   }
 }
 
-void setupThunder() {
-  thunder = new Thunder(minim.loadSample("thunder.mp3", 2048), context);
+void setupThunders() {
+  thunders = new Thunders(minim, context);
 }
 
 void setupKinect() {
@@ -81,7 +88,7 @@ void draw() {
   updateRain();
   drawRain(pg);
 
-  thunder.update(pg);
+  thunders.update(pg);
 
   pg.updatePixels();
   pg.endDraw();
@@ -106,14 +113,32 @@ void drawRain(PGraphics pg) {
 }
 
 boolean sketchFullScreen() {
-  return true;
+  return false;
 }
 
-void onNewUser(SimpleOpenNI context, int userId) {
+// -----------------------------------------------------------------
+// SimpleOpenNI events
+
+void onNewUser(SimpleOpenNI currContext, int userId) {
+  if (currContext.getUsers().length > 0)
+  {
+    backgroundSound.setGain(-10);
+    backgroundSoundWhenDetected.setGain(10);
+  }
 }
 
-void onLostUser(SimpleOpenNI curContext, int userId) {
+void onLostUser(SimpleOpenNI currContext, int userId) {
+  if (currContext.getUsers().length == 1 || currContext.getUsers().length == 0)
+  {
+    backgroundSoundWhenDetected.setGain(-10);
+    backgroundSound.setGain(10);
+  }
 }
 
-void onVisibleUser(SimpleOpenNI curContext, int userId) {
+void onVisibleUser(SimpleOpenNI currContext, int userId) {
+  // println("onVisibleUser - userId: " + userId);
+}
+
+void onOutOfSceneUser(SimpleOpenNI curContext, int userId)
+{
 }
