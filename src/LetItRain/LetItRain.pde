@@ -75,6 +75,8 @@ void setupKinect() {
 }
 
 void draw() {
+  frame.setTitle(int(frameRate) + " fps");
+
   background(0);
 
   context.update();
