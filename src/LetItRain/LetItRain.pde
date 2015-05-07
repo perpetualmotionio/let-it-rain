@@ -9,14 +9,16 @@ AudioSnippet backgroundSoundWhenDetected;
 
 SimpleOpenNI context;
 PGraphics pg;
+PFont f;
 
 Thunders thunders;
 
 final float scale = 1.0;
-final int numDrops = 10000;
+final int numDrops = 20000;
 
+final boolean shouldTakePhotos = false;
 final String saveDirectory = "/Users/ryankanno/Projects/Makerfaire/let-it-rain-images/";
-final int milliSecondsBetweenImageSaves = 5000;
+final int milliSecondsBetweenImageSaves = 10000;
 int timer = 0;
 
 String timestamp;
@@ -27,6 +29,7 @@ void setup() {
   size((int)(640 * scale), (int)(480 * scale), P3D);
   background(0);
   pg = createGraphics(width, height);
+  f = createFont("Helvetica", 32, true);
   smooth();
   setupAudio();
   setupKinect();
@@ -105,11 +108,40 @@ void draw() {
   screenShot();
 }
 
+// TODO: Make more fancy
 void screenShot() {
   if (millis() - timer >= milliSecondsBetweenImageSaves) {
-    timestamp = year() + nf(month(),2) + nf(day(),2) + "-"  + nf(hour(),2) + nf(minute(),2) + nf(second(),2);
-    save(saveDirectory + timestamp + ".jpg");
+    if (shouldTakePhotos) {
+      timestamp = year() + nf(month(),2) + nf(day(),2) + "-"  + nf(hour(),2) + nf(minute(),2) + nf(second(),2);
+      save(saveDirectory + timestamp + ".jpg");
+    }
     timer = millis();
+  } else if (millis() - timer >= milliSecondsBetweenImageSaves - 1000) {
+    textFont(f,32);
+    fill(color(255,0,0));
+    text("1", width - 40, 50);
+
+    stroke(color(255, 0, 0));
+    strokeWeight(20);
+    noFill();
+    rect(0, 0, width, height);
+
+  } else if (millis() - timer >= milliSecondsBetweenImageSaves - 2000) {
+    textFont(f,32);
+    fill(color(255,0,0));
+    text("2", width - 40, 50);
+  } else if (millis() - timer >= milliSecondsBetweenImageSaves - 3000) {
+    textFont(f,32);
+    fill(color(255,0,0));
+    text("3", width - 40, 50);
+  } else if (millis() - timer >= milliSecondsBetweenImageSaves - 4000) {
+    textFont(f,32);
+    fill(color(255,0,0));
+    text("4", width - 40, 50);
+  } else if (millis() - timer >= milliSecondsBetweenImageSaves - 5000) {
+    textFont(f,32);
+    fill(color(255,0,0));
+    text("5", width - 40, 50);
   }
 }
 
