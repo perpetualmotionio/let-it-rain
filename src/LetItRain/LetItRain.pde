@@ -15,6 +15,12 @@ Thunders thunders;
 final float scale = 1.0;
 final int numDrops = 10000;
 
+final String saveDirectory = "/Users/ryankanno/Projects/Makerfaire/let-it-rain-images/";
+final int milliSecondsBetweenImageSaves = 5000;
+int timer = 0;
+
+String timestamp;
+
 HashMap drops = new HashMap();
 
 void setup() {
@@ -96,6 +102,15 @@ void draw() {
   pg.endDraw();
 
   image(pg, 0, 0);
+  screenShot();
+}
+
+void screenShot() {
+  if (millis() - timer >= milliSecondsBetweenImageSaves) {
+    timestamp = year() + nf(month(),2) + nf(day(),2) + "-"  + nf(hour(),2) + nf(minute(),2) + nf(second(),2);
+    save(saveDirectory + timestamp + ".jpg");
+    timer = millis();
+  }
 }
 
 void updateRain() {

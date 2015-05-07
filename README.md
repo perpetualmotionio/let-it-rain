@@ -10,3 +10,4 @@ Kinect demo, [KinectRain](https://github.com/taromorimoto/KinectRain).
 * Add lightning streaks
 * Use logarithmically decreasing function (instead of linear) to change lighting fill
 * Add color
+* Add screen capture -> twitter
