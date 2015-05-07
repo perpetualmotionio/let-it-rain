@@ -18,7 +18,7 @@ final int numDrops = 20000;
 
 final boolean shouldTakePhotos = false;
 final String saveDirectory = "/Users/ryankanno/Projects/Makerfaire/let-it-rain-images/";
-final int milliSecondsBetweenImageSaves = 10000;
+final int milliSecondsBetweenImageSaves = 30000;
 int timer = 0;
 
 String timestamp;
